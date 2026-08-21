@@ -1,0 +1,15 @@
+{
+  "n_records": 13243,
+  "n_positive_label_1": 6188,
+  "n_negative_label_0": 7055,
+  "positive_min_synergy": 10.0035713913,
+  "positive_max_synergy": 179.123324559,
+  "negative_min_synergy": -326.4643042417,
+  "negative_max_synergy": -0.0040496726,
+  "n_synergy_gt_10": 6188,
+  "n_synergy_lt_0": 7055,
+  "n_synergy_between_0_and_10_inclusive": 0,
+  "all_label1_have_synergy_gt_10": true,
+  "all_label0_have_synergy_lt_0": true,
+  "supported_label_definition": "Within the supplied all_ddi.csv, label=1 corresponds to synergy > 10 and label=0 corresponds to synergy < 0; no retained record has synergy in [0, 10]."
+}
