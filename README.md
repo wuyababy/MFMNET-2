@@ -16,6 +16,16 @@ MFMNet/
 ├── transformer.py              # 早期 Transformer 实验模块
 ├── loader.py                   # 数据读取与预处理
 └── main.py                     # 基础模型训练入口
+├── figures/
+│   ├── make_fig2_atomic_similarity.py   # Figure 2 (atomic-feature similarity heatmaps)
+│   ├── make_fig3_performance.py         # Figure 3 (A/B/C performance panels)
+│   ├── make_fig4_cell_lines.py          # Figure 4 (per-cell-line Precision / MSE)
+│   └── make_fig5_model_comparison.py    # Figure 5 (fold-matched model comparison)
+├── checkpoints/                         # released model weights (5 folds x 2 variants)
+├── results/
+│   ├── fold_metrics/                    # per-fold metrics for the four compared models
+│   └── predictions/                     # per-sample test-fold predictions + sample_cell_map.csv
+└── dump_initial_predictions.py          # per-sample predictions from released checkpoints
 ```
 
 > `muti_head_attention.py` 和 `transformer.py` 保留用于早期实验和代码复现。当前论文报告的 MFMNet 主干结构采用 **TGP + CSAR**，不将 Transformer 或多头注意力模块作为当前核心模型组成部分。
@@ -262,6 +272,73 @@ result/
 
 ---
 
+---
+
+## Reproducing the figures
+
+All figure scripts read the released data under `results/` and `checkpoints/`;
+no synthetic data is used.
+
+**Figure 1** is a schematic architecture diagram (not data-driven).
+
+**Figure 2 - atomic-feature similarity heatmaps (VINBLASTINE / L778123, before vs. after training):**
+
+```bash
+python figures/make_fig2_atomic_similarity.py \
+    --codes-dir . \
+    --checkpoint checkpoints/mfmnet_full_fold1.pt \
+    --drug-name1 VINBLASTINE --drug-name2 "L-778123 free base" \
+    --label1 VINBLASTINE --label2 L778123 \
+    --xlsx DrugComb_drug_identifiers.xlsx \
+    --outdir figures/output/fig2
+```
+
+"Before training" uses the same architecture randomly initialized with seed 0;
+"after training" loads the released checkpoint.
+
+**Figure 3 - five-fold cross-validation performance panels
+(A score distributions, B precision-recall, C ROC +/- SD):**
+
+```bash
+python figures/make_fig3_performance.py --outdir figures/output/fig3
+```
+
+The panels are computed from the released per-sample test-fold predictions
+(`results/predictions/`), which correspond to the released checkpoints.
+The per-fold AUROC / PR-AUC values of the initial five-fold cross-validation
+run reported in Table 2 are released verbatim in
+`same5fold_MFMNet_DeepDDS_XGBoost.csv`
+(MFMNet 0.9334 / 0.9331 / 0.9277 / 0.9251 / 0.9315; mean 0.9301 +/- 0.0036).
+
+**Figure 4 - cell-line-level Precision and MSE (MFMNet vs. DeepDDS-GCN):**
+
+```bash
+python figures/make_fig4_cell_lines.py --outdir figures/output/fig4
+```
+
+Computed from the released per-sample predictions joined with
+`results/predictions/sample_cell_map.csv`. The MSE panel is displayed on a
+x10^4 scale.
+
+**Figure 5 - fold-matched model comparison:**
+
+```bash
+python figures/make_fig5_model_comparison.py --outdir figures/output/fig5
+```
+
+Reads the four per-fold metric CSVs under `results/fold_metrics/`; the printed
+values match Table 3 (MFMNet AUROC 0.9227 +/- 0.0055, XGBoost 0.9149 +/- 0.0028,
+DeepDDS-GCN 0.8968 +/- 0.0079, DeepDDS-GAT 0.8911 +/- 0.0142). The paired
+t-tests with Holm correction are released in `paired_ttest_holm_results.csv`.
+
+**Per-sample predictions from any released checkpoint set** can be regenerated:
+
+```bash
+python dump_initial_predictions.py \
+    --codes-dir . --ckpt-dir checkpoints \
+    --outdir results/predictions/mfmnet
+```
+
 ## 主要实验结果
 
 ### 初始五折交叉验证
@@ -372,6 +449,9 @@ Throughput ≈ 1003 samples/s
 
 ## 可重复性
 
+- Released model weights (main model and embedding-independent variant, five folds each, see `checkpoints/`);
+- Figure scripts together with per-fold metrics and per-sample predictions (see `figures/` and `results/`, and the "Reproducing the figures" section above).
+  
 本项目提供：
 
 - 模型训练代码；
