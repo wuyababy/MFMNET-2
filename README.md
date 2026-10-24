@@ -29,6 +29,17 @@ MFMNet/
 ```
 
 > `muti_head_attention.py` 和 `transformer.py` 保留用于早期实验和代码复现。当前论文报告的 MFMNet 主干结构采用 **TGP + CSAR**，不将 Transformer 或多头注意力模块作为当前核心模型组成部分。
+> **File placement note:**&#8203; Due to web-upload constraints, the released
+> checkpoints (`mfmnet_full_fold{1..5}.pt`, `mfmnet_no_drug_embedding_fold{1..5}.pt`)
+> and the four figure scripts (`make_fig*.py`) currently sit at the repository
+> root rather than inside the `checkpoints/` and `figures/` folders. The
+> commands in the "Reproducing the figures" section assume the layout shown in
+> the tree above; before running them, either move the files into place
+> (`*.pt` → `checkpoints/`, `make_fig*.py` → `figures/`) or pass the actual
+> paths (e.g. `--checkpoint mfmnet_full_fold1.pt`). The per-fold metrics and
+> per-sample predictions are provided in `results.zip` at the repository root;
+> unzip it into `results/` (it contains `fold_metrics/` and `predictions/`)
+> before running the figure scripts.
 
 ---
 
