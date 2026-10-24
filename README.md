@@ -15,7 +15,7 @@ MFMNet/
 ├── muti_head_attention.py      # 早期多头注意力实验模块
 ├── transformer.py              # 早期 Transformer 实验模块
 ├── loader.py                   # 数据读取与预处理
-└── main.py                     # 基础模型训练入口
+├── main.py                     # 基础模型训练入口
 ├── figures/
 │   ├── make_fig2_atomic_similarity.py   # Figure 2 (atomic-feature similarity heatmaps)
 │   ├── make_fig3_performance.py         # Figure 3 (A/B/C performance panels)
@@ -283,7 +283,6 @@ result/
 
 ---
 
----
 
 ## Reproducing the figures
 
@@ -460,8 +459,6 @@ Throughput ≈ 1003 samples/s
 
 ## 可重复性
 
-- Released model weights (main model and embedding-independent variant, five folds each, see `checkpoints/`);
-- Figure scripts together with per-fold metrics and per-sample predictions (see `figures/` and `results/`, and the "Reproducing the figures" section above).
   
 本项目提供：
 
@@ -473,7 +470,8 @@ Throughput ≈ 1003 samples/s
 - statistical analysis scripts；
 - computational-resource measurement scripts；
 - 对应实验结果文件。
-
+- Released model weights (main model and embedding-independent variant, five folds each, see `checkpoints/`);
+- Figure scripts together with per-fold metrics and per-sample predictions (see `figures/` and `results/`, and the "Reproducing the figures" section above).
 建议正式复现实验时保持相同的数据划分、随机种子、训练参数和模型选择方法。
 
 ---
